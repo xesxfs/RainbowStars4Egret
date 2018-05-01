@@ -83,14 +83,14 @@ var game;
         Ball.prototype.drawBall = function () {
             var _self__ = this;
             this._asset = this.Star;
-            this._asset.scaleX = this._asset.scaleY = 0.2;
-            this._asset.x = -this._asset.width * 0.5;
-            this._asset.y = -this._asset.height * 0.5;
-            this._asset["smoothing"] = true;
+            this._asset.scaleX = this._asset.scaleY = 0.5;
+            this._asset.x = -this._asset.width * 0.5 * this._asset.scaleX;
+            this._asset.y = -this._asset.height * 0.5 * this._asset.scaleY;
+            // this._asset["smoothing"] = true;
             _self__.addChild(this._asset);
-            // var cm: com.gskinner.geom.ColorMatrix = new com.gskinner.geom.ColorMatrix();
-            // cm.adjustHue(Math.random() * 360 - 180);
-            // this.filters = [new egret.ColorMatrixFilter(cm)];
+            var cm = new com.ColorMatrix();
+            cm.adjustHue(Math.random() * 360 - 180);
+            this.filters = [new egret.ColorMatrixFilter(cm.matrix)];
         };
         Object.defineProperty(Ball.prototype, "isExpand", {
             get: function () {
@@ -125,12 +125,18 @@ var game;
             }
             this.rotation = this.rotation + this._dx * 2 * this._clockwizeRotation;
         };
-        Ball.prototype.checkIntersectWithBall = function ($ball) {
-            return egret.Point.distance(new egret.Point($ball.x, $ball.y), new egret.Point(this.x, this.y)) < $ball.radius * 0.5 + this._radius * 0.5;
+        Ball.prototype.checkIntersectWithBall = function (ball) {
+            return egret.Point.distance(new egret.Point(ball.x, ball.y), new egret.Point(this.x, this.y)) < ball.radius * 0.5 * ball.scaleX + this._radius * 0.5 * this.scaleX;
         };
         return Ball;
     }(egret.Sprite));
     game.Ball = Ball;
     __reflect(Ball.prototype, "game.Ball");
 })(game || (game = {}));
+game.Ball.EXPAND = "expand";
+game.Ball.REMOVE = "remove";
+game.Ball.activated = 0;
+game.Ball.explosionSpeed = 1;
+game.Ball.START_EXPAND = "startExpand";
+game.Ball.END_ALL = "endAllBalls";
 //# sourceMappingURL=Ball.js.map

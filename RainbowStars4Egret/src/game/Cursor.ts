@@ -22,11 +22,11 @@ module game {
 			this.Star_game_Cursor = new egret.Bitmap(RES.getRes("cursor_star_png"));
 			var _self__ = this;
 			this._asset = this.Star_game_Cursor;
-			this._asset.scaleX = this._asset.scaleY =0.5;
-			this._asset.x = -this._asset.width * 0.5;
-			this._asset.y = -this._asset.height * 0.5;
-			this._asset["smoothing"] = true;
+			this._asset.scaleX = this._asset.scaleY = 0.5;
+			this._asset.x = -this._asset.width * 0.5 * this._asset.scaleX;
+			this._asset.y = -this._asset.height * 0.5 * this._asset.scaleY;
 			_self__.addChild(this._asset);
+
 			console.log("cursor")
 		}
 

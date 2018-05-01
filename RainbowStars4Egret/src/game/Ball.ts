@@ -52,7 +52,7 @@ module game {
 		}
 
 		public reportRemove() {
-			var _self__: any = this;
+			var _self__ = this;
 			if (game.Ball.activated > 0) {
 				game.Ball.activated--;
 			}
@@ -64,7 +64,7 @@ module game {
 		}
 		/***扩大 */
 		public expand() {
-			var _self__: any = this;
+			var _self__ = this;
 			if (this._isExpand) {
 				return;
 			}
@@ -77,16 +77,16 @@ module game {
 
 		/****画星星 */
 		protected drawBall() {
-			var _self__: any = this;
+			var _self__ = this;
 			this._asset = this.Star;
-			this._asset.scaleX = this._asset.scaleY = 0.2;
-			this._asset.x = -this._asset.width * 0.5;
-			this._asset.y = -this._asset.height * 0.5;
-			this._asset["smoothing"] = true;
+			this._asset.scaleX = this._asset.scaleY = 0.5;
+			this._asset.x = -this._asset.width * 0.5 * this._asset.scaleX;
+			this._asset.y = -this._asset.height * 0.5 * this._asset.scaleY;
+			// this._asset["smoothing"] = true;
 			_self__.addChild(this._asset);
-			// var cm: com.gskinner.geom.ColorMatrix = new com.gskinner.geom.ColorMatrix();
-			// cm.adjustHue(Math.random() * 360 - 180);
-			// this.filters = [new egret.ColorMatrixFilter(cm)];
+			var cm: com.ColorMatrix = new com.ColorMatrix();
+			cm.adjustHue(Math.random() * 360 - 180);
+			this.filters = [new egret.ColorMatrixFilter(cm.matrix)];
 		}
 
 		public get isExpand(): boolean {
@@ -121,11 +121,19 @@ module game {
 			this.rotation = this.rotation + this._dx * 2 * this._clockwizeRotation;
 		}
 
-		public checkIntersectWithBall($ball: game.Ball): boolean {
-			return egret.Point.distance(new egret.Point($ball.x, $ball.y), new egret.Point(this.x, this.y)) < $ball.radius * 0.5 + this._radius * 0.5;
+		public checkIntersectWithBall(ball: game.Ball): boolean {
+			return egret.Point.distance(new egret.Point(ball.x, ball.y), new egret.Point(this.x, this.y)) < ball.radius * 0.5 * ball.scaleX + this._radius * 0.5 * this.scaleX;
 		}
 
 	}
+
 }
+
+game.Ball.EXPAND = "expand";
+game.Ball.REMOVE = "remove";
+game.Ball.activated = 0;
+game.Ball.explosionSpeed = 1;
+game.Ball.START_EXPAND = "startExpand";
+game.Ball.END_ALL = "endAllBalls";
 
 

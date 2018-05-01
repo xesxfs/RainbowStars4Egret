@@ -35,11 +35,11 @@ var game;
             // _self__.addChild(this._endLevelPanel);
             // this._endLevelPanel.addEventListener(game.display.EndLevelPanel.PLAY_AGAIN,this.replayLevel, this);
         };
-        Game.prototype.subscribeBallToEvents = function ($ball) {
-            $ball.addEventListener(game.Ball.EXPAND, this.checkNearBalls, this);
-            $ball.addEventListener(game.Ball.REMOVE, this.removeBall, this);
-            $ball.addEventListener(game.Ball.END_ALL, this.endLevel, this);
-            $ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
+        Game.prototype.subscribeBallToEvents = function (ball) {
+            ball.addEventListener(game.Ball.EXPAND, this.checkNearBalls, this);
+            ball.addEventListener(game.Ball.REMOVE, this.removeBall, this);
+            ball.addEventListener(game.Ball.END_ALL, this.endLevel, this);
+            ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
         };
         Game.prototype.addStartupPanel = function (e) {
             if (e === void 0) { e = null; }
@@ -131,38 +131,41 @@ var game;
         };
         Game.prototype.onStartExpand = function (e) {
             console.log("start expand");
-            // if (<any>!(flash.As3is(e.target, game.Cursor))) {
-            // 	this.addExplodeText(e.target["x"], e.target["y"]);
-            // 	this._gui.explosed++;
-            // 	this._gui.score = this._gui.score + game.Ball.activated * 1000;
-            // 	game.sound.SoundManager.playRandomExplodeSound();
-            // }
+            if (!(e.target instanceof game.Cursor)) {
+                // this.addExplodeText(e.target["x"], e.target["y"]);
+                // this._gui.explosed++;
+                // this._gui.score = this._gui.score + game.Ball.activated * 1000;
+                game.SoundManager.playRandomExplodeSound();
+            }
             // this._gui.explosedSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
         };
         Game.prototype.removeBall = function (e) {
             console.log("remove ball");
+            if (e.target instanceof game.Cursor) {
+                this._ballsHolder.removeChild(e.target);
+                return;
+            }
             var ball = e.target;
             var idx = this._balls.indexOf(ball);
             this._balls.splice(idx, 1);
-            // try {
-            // this._ballsHolder.removeChild(ball);
-            // }
-            // catch (e)
-            // { }
+            try {
+                this._ballsHolder.removeChild(ball);
+            }
+            catch (e) { }
         };
         Game.prototype.checkNearBalls = function (e) {
             var ball = null;
             var ball_key_a;
-            for (ball_key_a in this._balls.map) {
-                ball = this._balls.map[ball_key_a][1];
+            for (ball_key_a in this._balls) {
+                ball = this._balls[ball_key_a];
                 if (ball.checkIntersectWithBall(e.target)) {
                     ball.expand();
                 }
             }
         };
-        Game.prototype.addExplodeText = function ($x, $y) {
-            $x = ~~($x);
-            $y = ~~($y);
+        Game.prototype.addExplodeText = function (x, y) {
+            x = ~~(x);
+            y = ~~(y);
             var _self__ = this;
             // var mcExplode: mcExplodeStarText = new mcExplodeStarText();
             // _self__.addChild(mcExplode);
@@ -239,7 +242,7 @@ var game;
         Game.prototype.testStartGame = function () {
             this._ballsHolder = new egret.Sprite();
             this.addChild(this._ballsHolder);
-            this.addBalls(2);
+            this.addBalls(100);
             this.touchEnabled = true;
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
         };
@@ -283,6 +286,7 @@ var game;
             for (var i = (0); i < numBalls; i++) {
                 ball = new game.Ball();
                 this._ballsHolder.addChild(ball);
+                this._ballsHolder.cacheAsBitmap = true;
                 this._balls.push(ball);
                 this.subscribeBallToEvents(ball);
             }

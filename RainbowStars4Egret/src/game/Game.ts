@@ -32,15 +32,15 @@ module game {
 			// this._endLevelPanel.addEventListener(game.display.EndLevelPanel.PLAY_AGAIN,this.replayLevel, this);
 		}
 
-		private subscribeBallToEvents($ball: game.Ball) {
-			$ball.addEventListener(game.Ball.EXPAND, this.checkNearBalls, this);
-			$ball.addEventListener(game.Ball.REMOVE, this.removeBall, this);
-			$ball.addEventListener(game.Ball.END_ALL, this.endLevel, this);
-			$ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
+		private subscribeBallToEvents(ball: game.Ball) {
+			ball.addEventListener(game.Ball.EXPAND, this.checkNearBalls, this);
+			ball.addEventListener(game.Ball.REMOVE, this.removeBall, this);
+			ball.addEventListener(game.Ball.END_ALL, this.endLevel, this);
+			ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
 		}
 
 		private addStartupPanel(e: egret.Event = null) {
-			var _self__: any = this;
+			var _self__ = this;
 			// this.clearPanel(this._mcGameOver);
 			// this._startupPanel = new game.display.StartupPanel();
 			// _self__.addChild(this._startupPanel);
@@ -134,41 +134,45 @@ module game {
 
 		private onStartExpand(e: egret.Event) {
 			console.log("start expand")
-			// if (<any>!(flash.As3is(e.target, game.Cursor))) {
-			// 	this.addExplodeText(e.target["x"], e.target["y"]);
-			// 	this._gui.explosed++;
-			// 	this._gui.score = this._gui.score + game.Ball.activated * 1000;
-			// 	game.sound.SoundManager.playRandomExplodeSound();
-			// }
+			if (!(e.target instanceof game.Cursor)) {
+				// this.addExplodeText(e.target["x"], e.target["y"]);
+				// this._gui.explosed++;
+				// this._gui.score = this._gui.score + game.Ball.activated * 1000;
+				game.SoundManager.playRandomExplodeSound();
+			}
 			// this._gui.explosedSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
 		}
 
 		private removeBall(e: egret.Event) {
 			console.log("remove ball")
+			if (e.target instanceof Cursor) {
+				this._ballsHolder.removeChild(e.target);
+				return
+			}
 			var ball: game.Ball = e.target as game.Ball;
 			let idx = this._balls.indexOf(ball);
 			this._balls.splice(idx, 1);
-			// try {
-				// this._ballsHolder.removeChild(ball);
-			// }
-			// catch (e)
-			// { }
+			try {
+				this._ballsHolder.removeChild(ball);
+			}
+			catch (e)
+			{ }
 		}
 
 		private checkNearBalls(e: egret.Event) {
-			var ball: game.Ball = <any>null;
+			var ball: game.Ball = null;
 			var ball_key_a;
-			for (ball_key_a in this._balls.map) {
-				ball = this._balls.map[ball_key_a][1];
+			for (ball_key_a in this._balls) {
+				ball = this._balls[ball_key_a];
 				if (ball.checkIntersectWithBall(e.target as game.Ball)) {
 					ball.expand();
 				}
 			}
 		}
 
-		private addExplodeText($x: number, $y: number) {
-			$x = ~~($x);
-			$y = ~~($y);
+		private addExplodeText(x: number, y: number) {
+			x = ~~(x);
+			y = ~~(y);
 			var _self__: any = this;
 			// var mcExplode: mcExplodeStarText = new mcExplodeStarText();
 			// _self__.addChild(mcExplode);
@@ -204,7 +208,7 @@ module game {
 		}
 		/***增加引爆的星星 */
 		private addChargedBall(e: egret.TouchEvent) {
-			var _self__: any = this;
+			var _self__ = this;
 			// if (this._gui.alpha <= 0.7) {
 			// 	return;
 			// }
@@ -237,7 +241,7 @@ module game {
 			this._ballsHolder = new egret.Sprite();
 			_self__.addChild(this._ballsHolder);
 			// this.addBalls(game.common.GameData.TOTAL_BALLS[this._gui.level - 1]);
-			this.touchEnabled=true;
+			this.touchEnabled = true;
 			_self__.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
 			// this._gui.totalExplosed = game.common.GameData.GOAL_BALLS[this._gui.level - 1];
 			// this._gui.explosed = 0;
@@ -247,8 +251,8 @@ module game {
 		private testStartGame() {
 			this._ballsHolder = new egret.Sprite();
 			this.addChild(this._ballsHolder);
-			this.addBalls(2);
-			this.touchEnabled=true;
+			this.addBalls(100);
+			this.touchEnabled = true;
 			this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
 		}
 
@@ -296,6 +300,7 @@ module game {
 			for (var i: number = (0); i < numBalls; i++) {
 				ball = new game.Ball();
 				this._ballsHolder.addChild(ball);
+				this._ballsHolder.cacheAsBitmap = true;
 				this._balls.push(ball);
 				this.subscribeBallToEvents(ball);
 			}
