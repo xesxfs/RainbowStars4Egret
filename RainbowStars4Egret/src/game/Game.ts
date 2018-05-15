@@ -2,29 +2,32 @@ module game {
 	export class Game extends egret.Sprite {
 		public static stageW: number;
 		public static stageH: number;
-		// private _gui:game.display.Gui;
 		private _background: egret.Sprite;
-		// private _levelScreen:mcLevel;
 		private _totalLevels: number = 10;
 		private _balls: Array<Ball>;
-		// private _endLevelPanel:game.display.EndLevelPanel;
 		private _ballsHolder: egret.Sprite;
-		// private _startupPanel:game.display.StartupPanel;
-		// private _successLevelScreen:game.display.LevelSuccessPanel;
-		// private _mcGameOver:game.display.GameOverPanel;
+		private _startupPanel: StartPanel;
 		private _levelSuccess: boolean = false;
+
+
 
 		public constructor() {
 			super();
 			this._balls = [];
 			this.addBackground();
-			this.addStartupPanel();
-			this.testStartGame();
+			this.initStarGame();
+			// this.testStartGame();
 		}
 
 		private addEndLevelPanel() {
 			var _self__: any = this;
 			console.log("## addEndLevelPanel");
+			App.gameResult.setFail();
+			App.gameResult.replayBtn.addEventListener("touchTap", () => {
+				App.closePanel(App.gameResult);
+				this.startGame();
+			}, this);
+			App.openPanel(App.gameResult);
 			// this._endLevelPanel = new game.display.EndLevelPanel();
 			// this.centerMovie(this._endLevelPanel);
 			// this._endLevelPanel.lives = this._gui.lives;
@@ -39,37 +42,29 @@ module game {
 			ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
 		}
 
-		private addStartupPanel(e: egret.Event = null) {
-			var _self__ = this;
-			// this.clearPanel(this._mcGameOver);
-			// this._startupPanel = new game.display.StartupPanel();
-			// _self__.addChild(this._startupPanel);
-			// this._startupPanel.addEventListener(game.display.StartupPanel.PLAY, this.onClickPlay, this);
-			this._levelSuccess = false;
-		}
+
 
 		private endLevel(e: egret.Event) {
 			var ball: game.Ball = <any>null;
 			var ball_key_a;
-			for (ball_key_a in this._balls.map) {
-				ball = this._balls.map[ball_key_a][1];
+			for (ball_key_a in this._balls) {
+				ball = this._balls[ball_key_a];
 				ball.removeEventListener(game.Ball.END_ALL, this.endLevel, this);
 				ball.stopAndDissappear();
 			}
-			// this._gui.alpha = 0;
-			// this._levelSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
+			this._levelSuccess = GameData.explosed >= GameData.GOAL_BALLS[GameData.level - 1];
 			console.log("endLevel", this._levelSuccess);
 			if (this._levelSuccess) {
 				this.showSuccessLevelScreen();
 			}
 			else {
-				// this._gui.lives--;
-				// if (this._gui.lives == 0) {
-				// 	this.gameOver();
-				// }
-				// else {
-				// 	this.addEndLevelPanel();
-				// }
+				GameData.lives--;
+				if (GameData.lives == 0) {
+					this.gameOver();
+				}
+				else {
+					this.addEndLevelPanel();
+				}
 			}
 		}
 
@@ -99,15 +94,6 @@ module game {
 			this.showStartLevel();
 		}
 
-		private removeMe($sprite: egret.DisplayObject) {
-			var _self__: any = this;
-			try {
-				_self__.removeChild($sprite);
-				var $sprite: egret.DisplayObject = <any>null;
-			}
-			catch (e)
-			{ }
-		}
 
 		/***关卡选择 */
 		private showStartLevel(e: egret.Event = null) {
@@ -136,11 +122,11 @@ module game {
 			console.log("start expand")
 			if (!(e.target instanceof game.Cursor)) {
 				// this.addExplodeText(e.target["x"], e.target["y"]);
-				// this._gui.explosed++;
-				// this._gui.score = this._gui.score + game.Ball.activated * 1000;
+				GameData.explosed++;
+				GameData.score = GameData.score + game.Ball.activated * 1000;
 				game.SoundManager.playRandomExplodeSound();
 			}
-			// this._gui.explosedSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
+			GameData.explosedSuccess = GameData.explosed >= GameData.GOAL_BALLS[GameData.level - 1];
 		}
 
 		private removeBall(e: egret.Event) {
@@ -170,6 +156,7 @@ module game {
 			}
 		}
 
+		/***爆炸文字 */
 		private addExplodeText(x: number, y: number) {
 			x = ~~(x);
 			y = ~~(y);
@@ -184,14 +171,12 @@ module game {
 			// gs.TweenMax.to_static_gs_TweenMax(mcExplode, 0.3, { "delay": 2.5, "alpha": 0, "onComplete": flash.bind(this.removeMe, this), "onCompleteParams": [mcExplode] });
 		}
 
-		private addGui() {
-			var _self__: any = this;
-			// _self__.addChild(this._gui);
-		}
 
 		private gameOver(e: egret.Event = null) {
-			var _self__: any = this;
-			// console.log("## gameOver");
+			// var _self__: any = this;
+			console.log("## gameOver");
+			App.gameResult.setGameOver();
+			App.openPanel(App.gameResult);
 			// this.removeAllBalls();
 			// this.clearPanel(this._successLevelScreen);
 			// this._mcGameOver = new game.display.GameOverPanel();
@@ -218,7 +203,7 @@ module game {
 			ball.expand();
 			ball.x = e.localX;
 			ball.y = e.localY;
-			// _self__.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
+			_self__.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
 		}
 
 		/***添加背景 */
@@ -227,38 +212,46 @@ module game {
 			this._background = new egret.Sprite();
 			this._background.graphics.beginFill(0);
 			this._background.graphics.drawRect(0, 0, game.Game.stageW, game.Game.stageH);
-			this.addChild(this._background);
-			// _self__.addChild(new flash.Bitmap(new imgBackground(1, 1)));
-		}
-		/***开始游戏关卡 */
-		private startGameLevel(e: egret.Event = null) {
-			var _self__ = this;
-			console.log("## startGameLevel");
-			// game.sound.SoundManager.play(game.sound.SoundManager.BUTTON_CLICK);
-			// this.addGui();
-			// this._gui.alpha = 1;
-			// _self__.removeChild(this._levelScreen);
-			this._ballsHolder = new egret.Sprite();
-			_self__.addChild(this._ballsHolder);
-			// this.addBalls(game.common.GameData.TOTAL_BALLS[this._gui.level - 1]);
-			this.touchEnabled = true;
-			_self__.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
-			// this._gui.totalExplosed = game.common.GameData.GOAL_BALLS[this._gui.level - 1];
-			// this._gui.explosed = 0;
-			// this._gui.startLevel();
+			let bg = new eui.Image(RES.getRes("game_bg_png"));
+			bg.percentWidth = 100;
+			bg.percentHeight = 100;
+			this.addChild(bg);
+
 		}
 
-		private testStartGame() {
+
+		// private testStartGame() {
+		// 	this.initStarGame();
+		// 	this.addBalls(GameData.TOTAL_BALLS[GameData.level - 1]);
+		// }
+
+
+		private initStarGame() {
 			this._ballsHolder = new egret.Sprite();
 			this.addChild(this._ballsHolder);
-			this.addBalls(100);
 			this.touchEnabled = true;
+
+		}
+		/**************/
+		public startGame() {
+			let balls = GameData.TOTAL_BALLS[GameData.level - 1]
+			console.log("lv:", GameData.level);
+			GameData.explosed = 0;
 			this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
+			this.addBalls(balls);
 		}
 
 		private showSuccessLevelScreen() {
-			var _self__: any = this;
+			// var _self__: any = this;
 			console.log("## showSuccessLevelScreen");
+			GameData.level++;
+			App.gameResult.setSuccess();
+			App.openPanel(App.gameResult);
+			App.gameResult.nextLevelBtn.addEventListener("touchTap", () => {
+				App.closePanel(App.gameResult);
+				this.startGame();
+			}, this)
+
 			// this._successLevelScreen = new game.display.LevelSuccessPanel();
 			// this.centerMovie(this._successLevelScreen);
 			// this._successLevelScreen.levelBonus = this._gui.level * 1000;
@@ -282,17 +275,7 @@ module game {
 			this.showStartLevel();
 		}
 
-		private clearPanel($do: egret.DisplayObject) {
-			console.log("clear " + $do);
-			if ($do) {
-				try {
-					$do.parent.removeChild($do);
-				}
-				catch (e)
-				{ }
-				var $do: egret.DisplayObject = null;
-			}
-		}
+
 
 		private addBalls(numBalls: number) {
 			numBalls = ~~(numBalls);
@@ -308,7 +291,6 @@ module game {
 		/***点击游戏开始 */
 		private onClickPlay(e: egret.Event) {
 			var _self__: any = this;
-			// _self__.removeChild(this._startupPanel);
 			this.showStartLevel();
 		}
 	}

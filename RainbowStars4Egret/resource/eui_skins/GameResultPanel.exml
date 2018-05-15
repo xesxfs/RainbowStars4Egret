@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="GameResultPanelSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="1635e373664" ></w:Config>
+	<e:Image source="game_bg_png" width="100%" height="100%" visible="false"/>
+	<e:Image id="completeImg" source="complete_png" y="86" scaleX="0.5" scaleY="0.5" horizontalCenter="0"/>
+	<e:Image id="failImg" source="fail_png" y="134" horizontalCenter="0.5" scaleX="0.5" scaleY="0.5"/>
+	<e:Button id="backBtn" label="" y="844" left="24">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="result_back_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Button id="nextLevelBtn" label="" y="844" right="24">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="next_level_btn_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Image source="life_txt_png" x="128" y="390"/>
+	<e:Image source="count_png" x="128" y="504"/>
+	<e:Image source="game_result0_png" x="34" y="618"/>
+	<e:Image source="total_score_txt_png" x="228" y="736"/>
+	<e:Label id="lifeLab" text="1000" x="374" y="404"/>
+	<e:Label id="digitLab" text="1000" x="374" y="521"/>
+	<e:Label id="explortLab" text="1000" x="374" y="637"/>
+	<e:Label id="totalLab" text="10000" x="374" y="754"/>
+	<e:Button id="replayBtn" label="" x="354" y="888">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="replay_btn0_png" source.down="replay_btn1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+</e:Skin>

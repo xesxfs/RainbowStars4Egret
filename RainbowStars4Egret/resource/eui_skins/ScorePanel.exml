@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="ScorePanelSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui"
+        xmlns:w="http://ns.egret.com/wing">
+	<w:Config id="1635e26e9e4"></w:Config>
+	<e:Image source="game_bg_png" height="100%" width="100%" />
+	<e:Button id="backBtn" label="" y="916.55" horizontalCenter="0">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+				<e:Image width="100%" height="100%" source="game_back0_png" source.down="game_back1_png" />
+				<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Group width="80%" horizontalCenter="0" y="59.4">
+		<e:Image source="panel2_png" width="100%" height="100%" x="0"/>
+	<e:Scroller y="180" width="90%" horizontalCenter="0.5" anchorOffsetY="0" height="586">
+		<e:List width="100%" height="100%" x="88" y="152" >
+			<e:ArrayCollection>
+				<e:Array>
+					<e:Object level="1" score="20000"/>
+					<e:Object level="null" score="null"/>
+					<e:Object level="null" score="null"/>
+					<e:Object level="null" score="null"/>
+				</e:Array>
+			</e:ArrayCollection>
+			<e:layout>
+				<e:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+			</e:layout>
+		</e:List>
+	</e:Scroller>
+		<e:Image source="level_png" y="73" left="80"/>
+		<e:Image source="score_png" y="73" right="80"/>
+	</e:Group>
+</e:Skin>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LevelsPanelSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*" >
+	<w:Config id="1635e0748c0" ></w:Config>
+	<e:Image source="game_bg_png" width="100%" height="100%"/>
+	<ns1:LevelItem y="142" scaleX="0.7" scaleY="0.7" x="10"/>
+	<ns1:LevelItem y="142" scaleX="0.7" scaleY="0.7" x="336"/>
+	<ns1:LevelItem y="271" scaleX="0.7" scaleY="0.7" x="10"/>
+	<ns1:LevelItem y="269" scaleX="0.7" scaleY="0.7" x="336"/>
+	<ns1:LevelItem y="399" scaleX="0.7" scaleY="0.7" x="10"/>
+	<ns1:LevelItem y="397" scaleX="0.7" scaleY="0.7" x="336"/>
+	<ns1:LevelItem y="528" scaleX="0.7" scaleY="0.7" x="10"/>
+	<ns1:LevelItem y="524" scaleX="0.7" scaleY="0.7" x="336"/>
+	<ns1:LevelItem y="657.37" scaleX="0.7" scaleY="0.7" left="10"/>
+	<ns1:LevelItem y="652.2" scaleX="0.7" scaleY="0.7" right="10"/>
+	<e:Button label="" x="357.15" y="916.4" scaleX="0.7" scaleY="0.7">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="nextBtn0_png" source.down="nextBtn1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<e:Label text="1 / 10" x="213.91" y="929.4"/>
+</e:Skin>
