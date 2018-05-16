@@ -14,21 +14,24 @@ var game;
         __extends(Game, _super);
         function Game() {
             var _this = _super.call(this) || this;
-            // private _levelScreen:mcLevel;
             _this._totalLevels = 10;
-            // private _startupPanel:game.display.StartupPanel;
-            // private _successLevelScreen:game.display.LevelSuccessPanel;
-            // private _mcGameOver:game.display.GameOverPanel;
             _this._levelSuccess = false;
             _this._balls = [];
             _this.addBackground();
-            _this.addStartupPanel();
-            _this.testStartGame();
+            _this.initStarGame();
             return _this;
+            // this.testStartGame();
         }
         Game.prototype.addEndLevelPanel = function () {
+            var _this = this;
             var _self__ = this;
             console.log("## addEndLevelPanel");
+            App.gameResult.setFail();
+            App.gameResult.replayBtn.addEventListener("touchTap", function () {
+                App.closePanel(App.gameResult);
+                _this.startGame();
+            }, this);
+            App.openPanel(App.gameResult);
             // this._endLevelPanel = new game.display.EndLevelPanel();
             // this.centerMovie(this._endLevelPanel);
             // this._endLevelPanel.lives = this._gui.lives;
@@ -41,37 +44,27 @@ var game;
             ball.addEventListener(game.Ball.END_ALL, this.endLevel, this);
             ball.addEventListener(game.Ball.START_EXPAND, this.onStartExpand, this);
         };
-        Game.prototype.addStartupPanel = function (e) {
-            if (e === void 0) { e = null; }
-            var _self__ = this;
-            // this.clearPanel(this._mcGameOver);
-            // this._startupPanel = new game.display.StartupPanel();
-            // _self__.addChild(this._startupPanel);
-            // this._startupPanel.addEventListener(game.display.StartupPanel.PLAY, this.onClickPlay, this);
-            this._levelSuccess = false;
-        };
         Game.prototype.endLevel = function (e) {
             var ball = null;
             var ball_key_a;
-            for (ball_key_a in this._balls.map) {
-                ball = this._balls.map[ball_key_a][1];
+            for (ball_key_a in this._balls) {
+                ball = this._balls[ball_key_a];
                 ball.removeEventListener(game.Ball.END_ALL, this.endLevel, this);
                 ball.stopAndDissappear();
             }
-            // this._gui.alpha = 0;
-            // this._levelSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
+            this._levelSuccess = GameData.explosed >= GameData.GOAL_BALLS[GameData.level - 1];
             console.log("endLevel", this._levelSuccess);
             if (this._levelSuccess) {
                 this.showSuccessLevelScreen();
             }
             else {
-                // this._gui.lives--;
-                // if (this._gui.lives == 0) {
-                // 	this.gameOver();
-                // }
-                // else {
-                // 	this.addEndLevelPanel();
-                // }
+                GameData.lives--;
+                if (GameData.lives == 0) {
+                    this.gameOver();
+                }
+                else {
+                    this.addEndLevelPanel();
+                }
             }
         };
         Game.prototype.removeAllBalls = function () {
@@ -97,14 +90,6 @@ var game;
             // 	this._endLevelPanel = null;
             // }
             this.showStartLevel();
-        };
-        Game.prototype.removeMe = function ($sprite) {
-            var _self__ = this;
-            try {
-                _self__.removeChild($sprite);
-                var $sprite = null;
-            }
-            catch (e) { }
         };
         /***关卡选择 */
         Game.prototype.showStartLevel = function (e) {
@@ -133,11 +118,11 @@ var game;
             console.log("start expand");
             if (!(e.target instanceof game.Cursor)) {
                 // this.addExplodeText(e.target["x"], e.target["y"]);
-                // this._gui.explosed++;
-                // this._gui.score = this._gui.score + game.Ball.activated * 1000;
+                GameData.explosed++;
+                GameData.score = GameData.score + game.Ball.activated * 1000;
                 game.SoundManager.playRandomExplodeSound();
             }
-            // this._gui.explosedSuccess = this._gui.explosed >= game.common.GameData.GOAL_BALLS[this._gui.level - 1];
+            GameData.explosedSuccess = GameData.explosed >= GameData.GOAL_BALLS[GameData.level - 1];
         };
         Game.prototype.removeBall = function (e) {
             console.log("remove ball");
@@ -163,6 +148,7 @@ var game;
                 }
             }
         };
+        /***爆炸文字 */
         Game.prototype.addExplodeText = function (x, y) {
             x = ~~(x);
             y = ~~(y);
@@ -176,14 +162,12 @@ var game;
             // gs.TweenMax.to_static_gs_TweenMax(mcExplode, 0.3, { "delay": 2, "alpha": 1 });
             // gs.TweenMax.to_static_gs_TweenMax(mcExplode, 0.3, { "delay": 2.5, "alpha": 0, "onComplete": flash.bind(this.removeMe, this), "onCompleteParams": [mcExplode] });
         };
-        Game.prototype.addGui = function () {
-            var _self__ = this;
-            // _self__.addChild(this._gui);
-        };
         Game.prototype.gameOver = function (e) {
             if (e === void 0) { e = null; }
-            var _self__ = this;
-            // console.log("## gameOver");
+            // var _self__: any = this;
+            console.log("## gameOver");
+            App.gameResult.setGameOver();
+            App.openPanel(App.gameResult);
             // this.removeAllBalls();
             // this.clearPanel(this._successLevelScreen);
             // this._mcGameOver = new game.display.GameOverPanel();
@@ -210,7 +194,7 @@ var game;
             ball.expand();
             ball.x = e.localX;
             ball.y = e.localY;
-            // _self__.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
+            _self__.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
         };
         /***添加背景 */
         Game.prototype.addBackground = function () {
@@ -218,37 +202,39 @@ var game;
             this._background = new egret.Sprite();
             this._background.graphics.beginFill(0);
             this._background.graphics.drawRect(0, 0, game.Game.stageW, game.Game.stageH);
-            this.addChild(this._background);
-            // _self__.addChild(new flash.Bitmap(new imgBackground(1, 1)));
+            var bg = new eui.Image(RES.getRes("game_bg_png"));
+            bg.percentWidth = 100;
+            bg.percentHeight = 100;
+            this.addChild(bg);
         };
-        /***开始游戏关卡 */
-        Game.prototype.startGameLevel = function (e) {
-            if (e === void 0) { e = null; }
-            var _self__ = this;
-            console.log("## startGameLevel");
-            // game.sound.SoundManager.play(game.sound.SoundManager.BUTTON_CLICK);
-            // this.addGui();
-            // this._gui.alpha = 1;
-            // _self__.removeChild(this._levelScreen);
-            this._ballsHolder = new egret.Sprite();
-            _self__.addChild(this._ballsHolder);
-            // this.addBalls(game.common.GameData.TOTAL_BALLS[this._gui.level - 1]);
-            this.touchEnabled = true;
-            _self__.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
-            // this._gui.totalExplosed = game.common.GameData.GOAL_BALLS[this._gui.level - 1];
-            // this._gui.explosed = 0;
-            // this._gui.startLevel();
-        };
-        Game.prototype.testStartGame = function () {
+        // private testStartGame() {
+        // 	this.initStarGame();
+        // 	this.addBalls(GameData.TOTAL_BALLS[GameData.level - 1]);
+        // }
+        Game.prototype.initStarGame = function () {
             this._ballsHolder = new egret.Sprite();
             this.addChild(this._ballsHolder);
-            this.addBalls(100);
             this.touchEnabled = true;
+        };
+        /**************/
+        Game.prototype.startGame = function () {
+            var balls = GameData.TOTAL_BALLS[GameData.level - 1];
+            console.log("lv:", GameData.level);
+            GameData.explosed = 0;
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
+            this.addBalls(balls);
         };
         Game.prototype.showSuccessLevelScreen = function () {
-            var _self__ = this;
+            var _this = this;
+            // var _self__: any = this;
             console.log("## showSuccessLevelScreen");
+            GameData.level++;
+            App.gameResult.setSuccess();
+            App.openPanel(App.gameResult);
+            App.gameResult.nextLevelBtn.addEventListener("touchTap", function () {
+                App.closePanel(App.gameResult);
+                _this.startGame();
+            }, this);
             // this._successLevelScreen = new game.display.LevelSuccessPanel();
             // this.centerMovie(this._successLevelScreen);
             // this._successLevelScreen.levelBonus = this._gui.level * 1000;
@@ -270,16 +256,6 @@ var game;
             this._levelSuccess = false;
             this.showStartLevel();
         };
-        Game.prototype.clearPanel = function ($do) {
-            console.log("clear " + $do);
-            if ($do) {
-                try {
-                    $do.parent.removeChild($do);
-                }
-                catch (e) { }
-                var $do = null;
-            }
-        };
         Game.prototype.addBalls = function (numBalls) {
             numBalls = ~~(numBalls);
             var ball = null;
@@ -294,7 +270,6 @@ var game;
         /***点击游戏开始 */
         Game.prototype.onClickPlay = function (e) {
             var _self__ = this;
-            // _self__.removeChild(this._startupPanel);
             this.showStartLevel();
         };
         return Game;
