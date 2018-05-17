@@ -229,6 +229,14 @@ var game;
             // var _self__: any = this;
             console.log("## showSuccessLevelScreen");
             GameData.level++;
+            if (GameData.level > GameData.GOAL_BALLS.length) {
+                GameData.level = 1;
+            }
+            if (GameData.level > GameData.lockingLv) {
+                GameData.lockingLv++;
+                egret.localStorage.setItem("lockingLv", GameData.lockingLv.toString());
+                console.log(GameData.lockingLv);
+            }
             App.gameResult.setSuccess();
             App.openPanel(App.gameResult);
             App.gameResult.nextLevelBtn.addEventListener("touchTap", function () {
@@ -279,4 +287,3 @@ var game;
     game.Game.stageW = 640;
     game.Game.stageH = 1136;
 })(game || (game = {}));
-//# sourceMappingURL=Game.js.map

@@ -3,6 +3,8 @@ class ScorePanel extends eui.Component implements eui.UIComponent {
 		super();
 	}
 	public backBtn: eui.Button;
+	public scoreList:eui.List;
+
 
 	protected partAdded(partName: string, instance: any): void {
 		super.partAdded(partName, instance);

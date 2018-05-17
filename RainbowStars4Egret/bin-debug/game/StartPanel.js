@@ -41,4 +41,3 @@ var StartPanel = (function (_super) {
     return StartPanel;
 }(eui.Component));
 __reflect(StartPanel.prototype, "StartPanel", ["eui.UIComponent", "egret.DisplayObject"]);
-//# sourceMappingURL=StartPanel.js.map

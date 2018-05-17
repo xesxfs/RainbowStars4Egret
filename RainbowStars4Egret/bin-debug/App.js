@@ -12,6 +12,7 @@ var App = (function () {
         this.game = new game.Game();
         this.scene = new eui.UILayer();
         this.panel = new eui.UILayer();
+        this.loadData();
         this.panel.touchThrough = true;
         egret.MainContext.instance.stage.addChild(this.scene);
         egret.MainContext.instance.stage.addChild(this.panel);
@@ -32,7 +33,11 @@ var App = (function () {
     App.closeAllPanel = function () {
         this.panel.removeChildren();
     };
+    App.loadData = function () {
+        var lv = egret.localStorage.getItem("lockingLv");
+        GameData.lockingLv = lv ? (isNaN(parseInt(lv)) ? 1 : parseInt(lv)) : 1;
+        console.log("lockingLv:", GameData.lockingLv);
+    };
     return App;
 }());
 __reflect(App.prototype, "App");
-//# sourceMappingURL=App.js.map

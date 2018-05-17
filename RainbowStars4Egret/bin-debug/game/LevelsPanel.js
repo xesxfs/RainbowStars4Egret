@@ -11,17 +11,65 @@ r.prototype = e.prototype, t.prototype = new r();
 var LevelsPanel = (function (_super) {
     __extends(LevelsPanel, _super);
     function LevelsPanel() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.curPage = 1;
+        _this.isInit = false;
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onEnable, _this);
+        _this.skinName = "LevelsPanelSkin";
+        return _this;
     }
-    LevelsPanel.prototype.partAdded = function (partName, instance) {
-        _super.prototype.partAdded.call(this, partName, instance);
-    };
     LevelsPanel.prototype.childrenCreated = function () {
-        var _this = this;
         _super.prototype.childrenCreated.call(this);
-        this.addEventListener("touchTap", function () { App.closePanel(_this); }, this);
+        this.totalPage = Math.ceil(GameData.GOAL_BALLS.length / 10);
+        // this.addEventListener("touchTap", () => { App.closePanel(this) }, this)
+        this.nextBtn.addEventListener("touchTap", this.onNextPage, this);
+        this.addEventListener("touchTap", this.selectLevel, this);
+        this.isInit = true;
+        this.setPageData();
+    };
+    LevelsPanel.prototype.onEnable = function () {
+        console.log("onEnable");
+        if (this.isInit)
+            this.setPageData();
+    };
+    LevelsPanel.prototype.setPageData = function () {
+        for (var i = 0; i < 10; i++) {
+            var levItem = this.getChildAt(i + 3);
+            var lv = (this.curPage - 1) * 10 + i;
+            if (lv > GameData.GOAL_BALLS.length) {
+                levItem.visible = false;
+            }
+            else {
+                levItem.visible = true;
+                levItem.setLevel(lv + 1);
+            }
+            if (GameData.lockingLv > lv) {
+                levItem.setLock(false);
+            }
+            else {
+                levItem.setLock(true);
+            }
+        }
+        this.pageLab.text = this.curPage.toString() + " / " + this.totalPage.toString();
+    };
+    LevelsPanel.prototype.onNextPage = function () {
+        if (this.curPage < this.totalPage) {
+            this.curPage++;
+        }
+        else {
+            this.curPage = 1;
+        }
+        this.setPageData();
+    };
+    LevelsPanel.prototype.selectLevel = function (e) {
+        if (e.target instanceof LevelItem) {
+            var lvItem = e.target;
+            GameData.level = lvItem.level;
+            App.game.startGame();
+            App.runScene(App.game);
+            App.closePanel(this);
+        }
     };
     return LevelsPanel;
 }(eui.Component));
-__reflect(LevelsPanel.prototype, "LevelsPanel", ["eui.UIComponent", "egret.DisplayObject"]);
-//# sourceMappingURL=LevelsPanel.js.map
+__reflect(LevelsPanel.prototype, "LevelsPanel");

@@ -26,4 +26,3 @@ var ScorePanel = (function (_super) {
     return ScorePanel;
 }(eui.Component));
 __reflect(ScorePanel.prototype, "ScorePanel", ["eui.UIComponent", "egret.DisplayObject"]);
-//# sourceMappingURL=ScorePanel.js.map

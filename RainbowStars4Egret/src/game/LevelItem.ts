@@ -6,6 +6,7 @@ class LevelItem extends eui.Component implements eui.UIComponent {
 
 	private levelLab: eui.BitmapLabel;
 	private lockImg: eui.Image;
+	public level: number = 0;
 
 
 	protected partAdded(partName: string, instance: any): void {
@@ -15,13 +16,16 @@ class LevelItem extends eui.Component implements eui.UIComponent {
 
 	protected childrenCreated(): void {
 		super.childrenCreated();
+		this.touchChildren = false;
 	}
 
 	public setLevel(level: number) {
+		this.level = level;
 		this.levelLab.text = (~~level).toString();
 	}
 
 	public setLock(isLock: boolean) {
+		this.touchEnabled = !isLock
 		this.lockImg.visible = isLock;
 		this.getChildAt(0).visible = !isLock;
 		this.getChildAt(1).visible = isLock;

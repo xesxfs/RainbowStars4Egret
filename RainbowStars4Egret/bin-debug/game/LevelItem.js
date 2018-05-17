@@ -11,18 +11,23 @@ r.prototype = e.prototype, t.prototype = new r();
 var LevelItem = (function (_super) {
     __extends(LevelItem, _super);
     function LevelItem() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.level = 0;
+        return _this;
     }
     LevelItem.prototype.partAdded = function (partName, instance) {
         _super.prototype.partAdded.call(this, partName, instance);
     };
     LevelItem.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
+        this.touchChildren = false;
     };
     LevelItem.prototype.setLevel = function (level) {
+        this.level = level;
         this.levelLab.text = (~~level).toString();
     };
     LevelItem.prototype.setLock = function (isLock) {
+        this.touchEnabled = !isLock;
         this.lockImg.visible = isLock;
         this.getChildAt(0).visible = !isLock;
         this.getChildAt(1).visible = isLock;
@@ -32,4 +37,3 @@ var LevelItem = (function (_super) {
     return LevelItem;
 }(eui.Component));
 __reflect(LevelItem.prototype, "LevelItem", ["eui.UIComponent", "egret.DisplayObject"]);
-//# sourceMappingURL=LevelItem.js.map
