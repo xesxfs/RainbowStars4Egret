@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LevelsPanelSkin" width="640" height="1136" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" xmlns:ns1="*" >
+	<w:Config id="1635e0748c0" ></w:Config>
+	<e:Image source="game_bg_png" width="100%" height="100%"/>
+	<e:Label id="pageLab" text="1 / 10" x="213.91" y="929.4"/>
+	<e:Button id="nextBtn" label="" x="329" y="919" scaleX="0.6" scaleY="0.6">
+		<e:skinName>
+			<e:Skin states="up,down,disabled">
+			<e:Image width="100%" height="100%" source="nextBtn0_png" source.down="nextBtn1_png"/>
+			<e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0"/>
+			</e:Skin>
+		</e:skinName>
+	</e:Button>
+	<ns1:LevelItem y="259" scaleX="0.5" scaleY="0.5" x="78"/>
+	<ns1:LevelItem y="259" scaleX="0.5" scaleY="0.5" x="365"/>
+	<ns1:LevelItem y="380" scaleX="0.5" scaleY="0.5" x="78"/>
+	<ns1:LevelItem y="380" scaleX="0.5" scaleY="0.5" x="365"/>
+	<ns1:LevelItem y="500" scaleX="0.5" scaleY="0.5" x="78"/>
+	<ns1:LevelItem y="500" scaleX="0.5" scaleY="0.5" x="365"/>
+	<ns1:LevelItem y="620" scaleX="0.5" scaleY="0.5" x="78"/>
+	<ns1:LevelItem y="620" scaleX="0.5" scaleY="0.5" x="365"/>
+	<ns1:LevelItem y="739" scaleX="0.5" scaleY="0.5" x="78"/>
+	<ns1:LevelItem y="739" scaleX="0.5" scaleY="0.5" x="365"/>
+</e:Skin>

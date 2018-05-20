@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="LevelItemSkin" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing" >
+	<w:Config id="1635e0a7f34" ></w:Config>
+	<e:Image source="panel0_png" visible="false"/>
+	<e:Image source="panel1_png"/>
+	<e:Image source="game_round0_png" horizontalCenter="0" verticalCenter="0" visible="false"/>
+	<e:Image source="game_round1_png" horizontalCenter="0" verticalCenter="0"/>
+	<e:BitmapLabel id="levelLab" font="level_font_fnt" text="10" horizontalCenter="0" verticalCenter="0"/>
+	<e:Image id="lockImg" source="lock_png" right="50" verticalCenter="0"/>
+</e:Skin>
