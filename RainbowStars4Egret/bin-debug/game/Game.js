@@ -304,4 +304,3 @@ var game;
     game.Game.stageW = 640;
     game.Game.stageH = 1136;
 })(game || (game = {}));
-//# sourceMappingURL=Game.js.map

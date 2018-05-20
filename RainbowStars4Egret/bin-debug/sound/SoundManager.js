@@ -42,4 +42,3 @@ game.SoundManager.STAR_EXPLODE_4 = "StarExplode4";
 game.SoundManager.STAR_EXPLODE_5 = "StarExplode5";
 game.SoundManager._isMute = false;
 game.SoundManager.BUTTON_CLICK = "ButtonClick";
-//# sourceMappingURL=SoundManager.js.map
