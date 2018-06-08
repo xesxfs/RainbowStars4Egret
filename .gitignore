@@ -4,4 +4,4 @@ bin-debug
 template
 RainbowStars4Egret_wxgame
 *.js
-RainbowStars4Egret/bin-debug/game/Game.js
+*.map
