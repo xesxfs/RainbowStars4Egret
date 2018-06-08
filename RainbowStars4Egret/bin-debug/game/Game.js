@@ -118,6 +118,10 @@ var game;
                 GameData.explosed++;
                 GameData.score = GameData.score + game.Ball.activated * 1000;
                 game.SoundManager.playRandomExplodeSound();
+                if (this.usedBallCount < GameData.TOTAL_BALLS[GameData.level - 1]) {
+                    this.addBalls(1);
+                    this.usedBallCount++;
+                }
             }
             GameData.explosedSuccess = GameData.explosed >= GameData.GOAL_BALLS[GameData.level - 1];
         };
@@ -132,10 +136,6 @@ var game;
             this._balls.splice(idx, 1);
             try {
                 this._ballsHolder.removeChild(ball);
-                if (this.usedBallCount < GameData.GOAL_BALLS[GameData.level - 1]) {
-                    this.addBalls(1);
-                    this.usedBallCount++;
-                }
             }
             catch (e) { }
         };

@@ -17,13 +17,9 @@ var game;
             // this.Sta = game.Cursor_Sta;
             // this.drawBall();
         }
-        Object.defineProperty(Cursor.prototype, "radius", {
-            get: function () {
-                return this._radius * 1.5;
-            },
-            enumerable: true,
-            configurable: true
-        });
+        // public get radius(): number {
+        // 	return this._radius * 1.5;
+        // }
         // public set radius(value: number) {
         // 	egret.superSetter(game.Cursor, this, "radius", value);
         // }
@@ -31,9 +27,10 @@ var game;
             this.Star_game_Cursor = new egret.Bitmap(RES.getRes("cursor_star_png"));
             var _self__ = this;
             this._asset = this.Star_game_Cursor;
-            this._asset.scaleX = this._asset.scaleY = 0.5;
-            this._asset.x = -this._asset.width * 0.5 * this._asset.scaleX;
-            this._asset.y = -this._asset.height * 0.5 * this._asset.scaleY;
+            this._asset.width /= 2;
+            this._asset.height /= 2;
+            this._asset.anchorOffsetX = this._asset.width / 2;
+            this._asset.anchorOffsetY = this._asset.height / 2;
             _self__.addChild(this._asset);
             console.log("cursor");
         };

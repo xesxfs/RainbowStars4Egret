@@ -44,14 +44,14 @@ var game;
             var _self__ = this;
             _self__.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
             // gs.TweenMax.to_static_gs_TweenMax(this, 2, { "scaleX": 0, "scaleY": 0, "onComplete": flash.bind(this.reportRemove, this) });
-            egret.Tween.get(this).to({ "scaleX": 0, "scaleY": 0 }, 2000).call(this.reportRemove, this);
+            egret.Tween.get(this).to({ "scaleX": 0, "scaleY": 0 }, 200).call(this.reportRemove, this);
         };
         Object.defineProperty(Ball.prototype, "radius", {
             get: function () {
                 return this._radius;
             },
             set: function (value) {
-                this._radius = ~~value;
+                this._radius = value;
             },
             enumerable: true,
             configurable: true
@@ -76,18 +76,20 @@ var game;
             _self__.dispatchEvent(new egret.Event(game.Ball.START_EXPAND));
             game.Ball.activated++;
             // gs.TweenMax.to_static_gs_TweenMax(this, 1, { "scaleX": this._expandScaleValue, "scaleY": this._expandScaleValue, "onComplete": flash.bind(this.collapse, this), "onUpdate": flash.bind(this.changeRadius, this) });
-            egret.Tween.get(this, { onChange: this.changeRadius, onChangeObj: this }).to({ scaleX: this._expandScaleValue, scaleY: this._expandScaleValue }, 1000).call(this.collapse, this);
+            egret.Tween.get(this, { onChange: this.changeRadius, onChangeObj: this }).to({ scaleX: this._expandScaleValue, scaleY: this._expandScaleValue }, 2000).call(this.collapse, this);
             this._isExpand = true;
         };
         /****画星星 */
         Ball.prototype.drawBall = function () {
             var _self__ = this;
             this._asset = this.Star;
-            this._asset.scaleX = this._asset.scaleY = 0.5;
-            this._asset.x = -this._asset.width * 0.5 * this._asset.scaleX;
-            this._asset.y = -this._asset.height * 0.5 * this._asset.scaleY;
-            // this._asset["smoothing"] = true;
+            this._asset.width /= 2;
+            this._asset.height /= 2;
+            // this._asset.anchorOffsetX = this._asset.width / 2;
+            // this._asset.anchorOffsetY = this._asset.height / 2;
             _self__.addChild(this._asset);
+            this.anchorOffsetX = this.width / 2;
+            this._radius = this.anchorOffsetY = this.height / 2;
             var cm = new com.ColorMatrix();
             cm.adjustHue(Math.random() * 360 - 180);
             this.filters = [new egret.ColorMatrixFilter(cm.matrix)];
@@ -101,22 +103,23 @@ var game;
         });
         Ball.prototype.collapse = function () {
             // gs.TweenMax.to_static_gs_TweenMax(this, 0.3, { "delay": game.Ball.explosionSpeed, "scaleX": 0, "scaleY": 0, "onComplete": flash.bind(this.reportRemove, this), "onUpdate": flash.bind(this.changeRadius, this) });
-            egret.Tween.get(this, { onChange: this.changeRadius, onChangeObj: this }).wait(game.Ball.explosionSpeed).to({ scaleX: 0, scaleY: 0 }, 300).call(this.reportRemove, this);
+            egret.Tween.get(this, { onChange: this.changeRadius, onChangeObj: this }).wait(game.Ball.explosionSpeed).to({ scaleX: 0, scaleY: 0 }, 1000).call(this.reportRemove, this);
             this._isExpand = true;
         };
         /***改变半径 */
         Ball.prototype.changeRadius = function () {
-            this._radius = ~~(this.width * 0.7);
+            this._radius = (this.width * this.scaleX * 0.5);
+            console.log("width:", this.width, " scaleX:", this.scaleX, " _radius:", this, this._radius);
         };
         Ball.prototype.onEnterFrame = function (e) {
             var _self__ = this;
             if (!this._isExpand) {
                 this.x = this.x + this._dx;
                 this.y = this.y + this._dy;
-                if (this.x < 0 || this.x > game.Game.stageW) {
+                if ((this.x) < 0 || (this.x) > game.Game.stageW) {
                     this._dx = -this._dx;
                 }
-                if (this.y < 0 || this.y > game.Game.stageH) {
+                if ((this.y) < 0 || (this.y) > game.Game.stageH) {
                     this._dy = -this._dy;
                 }
             }
@@ -126,7 +129,7 @@ var game;
             this.rotation = this.rotation + this._dx * 2 * this._clockwizeRotation;
         };
         Ball.prototype.checkIntersectWithBall = function (ball) {
-            return egret.Point.distance(new egret.Point(ball.x, ball.y), new egret.Point(this.x, this.y)) < ball.radius * 0.5 * ball.scaleX + this._radius * 0.5 * this.scaleX;
+            return egret.Point.distance(new egret.Point(ball.x, ball.y), new egret.Point(this.x, this.y)) < (ball.radius + this._radius) * 0.8;
         };
         return Ball;
     }(egret.Sprite));
