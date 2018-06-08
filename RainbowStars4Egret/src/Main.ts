@@ -98,6 +98,7 @@ class Main extends eui.UILayer {
      */
     protected createGameScene(): void {
         App.startUp();
+
     }
 
 

@@ -11,7 +11,9 @@ r.prototype = e.prototype, t.prototype = new r();
 var ScorePanel = (function (_super) {
     __extends(ScorePanel, _super);
     function ScorePanel() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.skinName = "ScorePanelSkin";
+        return _this;
     }
     ScorePanel.prototype.partAdded = function (partName, instance) {
         _super.prototype.partAdded.call(this, partName, instance);
@@ -19,10 +21,25 @@ var ScorePanel = (function (_super) {
     ScorePanel.prototype.childrenCreated = function () {
         _super.prototype.childrenCreated.call(this);
         this.backBtn.addEventListener("touchTap", this.onBack, this);
+        // (this.scoreList.dataProvider as eui.ArrayCollection).removeAll();
+        console.log("ScorePanel");
     };
     ScorePanel.prototype.onBack = function () {
         App.closePanel(this);
     };
+    ScorePanel.prototype.addScore = function (lv, score) {
+        var arr = this.scoreList.dataProvider;
+        var item = arr.getItemAt(lv);
+        if (item) {
+            item.score = score;
+            arr.itemUpdated(item);
+        }
+        else {
+            arr.addItem({ level: lv, score: score });
+        }
+        arr.refresh();
+    };
     return ScorePanel;
 }(eui.Component));
-__reflect(ScorePanel.prototype, "ScorePanel", ["eui.UIComponent", "egret.DisplayObject"]);
+__reflect(ScorePanel.prototype, "ScorePanel");
+//# sourceMappingURL=ScorePanel.js.map

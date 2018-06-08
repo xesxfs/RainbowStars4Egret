@@ -47,3 +47,4 @@ var GameResultPanel = (function (_super) {
     return GameResultPanel;
 }(eui.Component));
 __reflect(GameResultPanel.prototype, "GameResultPanel", ["eui.UIComponent", "egret.DisplayObject"]);
+//# sourceMappingURL=GameResultPanel.js.map

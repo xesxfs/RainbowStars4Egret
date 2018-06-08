@@ -34,3 +34,4 @@ class LevelItem extends eui.Component implements eui.UIComponent {
 
 	}
 }
+window["LevelItem"] = LevelItem;

@@ -12,8 +12,9 @@ var GameData = (function () {
     GameData.score = 0;
     GameData.explosedSuccess = false;
     GameData.level = 1;
-    GameData.lives = 0;
+    GameData.lives = 3;
     GameData.lockingLv = 1;
     return GameData;
 }());
 __reflect(GameData.prototype, "GameData");
+//# sourceMappingURL=GameData.js.map

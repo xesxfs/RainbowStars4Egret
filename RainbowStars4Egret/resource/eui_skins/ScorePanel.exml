@@ -17,25 +17,7 @@
 			<e:List id="scoreList" width="100%" height="100%" x="88" y="152">
 				<e:ArrayCollection>
 					<e:Array>
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
-						<e:Object level="1" score="20000" />
+
 					</e:Array>
 				</e:ArrayCollection>
 				<e:layout>

@@ -8,7 +8,7 @@ class GameData {
 	public static score: number = 0;
 	public static explosedSuccess: boolean = false;
 	public static level: number = 1;
-	public static lives: number = 0;
+	public static lives: number = 3;
 
 	public static lockingLv: number = 1;
 }

@@ -8,6 +8,8 @@ module game {
 		private _ballsHolder: egret.Sprite;
 		private _startupPanel: StartPanel;
 		private _levelSuccess: boolean = false;
+		private usedBallCount: number = 0;
+
 
 
 
@@ -23,16 +25,18 @@ module game {
 			var _self__: any = this;
 			console.log("## addEndLevelPanel");
 			App.gameResult.setFail();
-			App.gameResult.replayBtn.addEventListener("touchTap", () => {
-				App.closePanel(App.gameResult);
-				this.startGame();
-			}, this);
+			App.gameResult.replayBtn.addEventListener("touchTap", this.onReplay, this);
 			App.openPanel(App.gameResult);
 			// this._endLevelPanel = new game.display.EndLevelPanel();
 			// this.centerMovie(this._endLevelPanel);
 			// this._endLevelPanel.lives = this._gui.lives;
 			// _self__.addChild(this._endLevelPanel);
 			// this._endLevelPanel.addEventListener(game.display.EndLevelPanel.PLAY_AGAIN,this.replayLevel, this);
+		}
+
+		private onReplay() {
+			App.closePanel(App.gameResult);
+			this.startGame();
 		}
 
 		private subscribeBallToEvents(ball: game.Ball) {
@@ -76,11 +80,6 @@ module game {
 				ball.reportRemove();
 			}
 			this._balls = [];
-		}
-
-		private centerMovie($mc: egret.DisplayObject) {
-			$mc.x = game.Game.stageW / 2 - $mc.width / 2;
-			$mc.y = game.Game.stageH / 2 - $mc.height / 2;
 		}
 
 		private replayLevel(e: egret.Event = null) {
@@ -140,6 +139,11 @@ module game {
 			this._balls.splice(idx, 1);
 			try {
 				this._ballsHolder.removeChild(ball);
+
+				if (this.usedBallCount < GameData.GOAL_BALLS[GameData.level - 1]) {
+					this.addBalls(1);
+					this.usedBallCount++;
+				}
 			}
 			catch (e)
 			{ }
@@ -177,7 +181,7 @@ module game {
 			console.log("## gameOver");
 			App.gameResult.setGameOver();
 			App.openPanel(App.gameResult);
-			// this.removeAllBalls();
+			this.removeAllBalls();
 			// this.clearPanel(this._successLevelScreen);
 			// this._mcGameOver = new game.display.GameOverPanel();
 			// this._mcGameOver.addEventListener(game.display.GameOverPanel.PLAY_AGAIN, flash.bind(this.onPlayAgain, this), null);
@@ -237,6 +241,9 @@ module game {
 			console.log("lv:", GameData.level);
 			GameData.explosed = 0;
 			this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.addChargedBall, this);
+			if (balls >= 30) {
+				this.usedBallCount = balls = 30
+			}
 			this.addBalls(balls);
 		}
 
@@ -254,13 +261,15 @@ module game {
 			}
 			App.gameResult.setSuccess();
 			App.openPanel(App.gameResult);
-			App.gameResult.nextLevelBtn.addEventListener("touchTap", () => {
-				App.closePanel(App.gameResult);
-				this.startGame();
-			}, this)
+			App.gameResult.nextLevelBtn.addEventListener("touchTap", this.onNextLevel, this)
 
 			// this._successLevelScreen = new game.display.LevelSuccessPanel();
 			// this.centerMovie(this._successLevelScreen);
+			App.gameResult.lifeLab.text = (GameData.lives * 10000).toString();
+			App.gameResult.digitLab.text = (GameData.level * 1000).toString();
+			App.gameResult.explortLab.text = ((GameData.explosed + GameData.GOAL_BALLS[GameData.level - 1]) * 10000).toString()
+			App.gameResult.totalLab.text = (parseInt(App.gameResult.lifeLab.text) + parseInt(App.gameResult.digitLab.text) + parseInt(App.gameResult.explortLab.text)).toString();
+			App.scorePanel.addScore(GameData.level - 1, parseInt(App.gameResult.totalLab.text));
 			// this._successLevelScreen.levelBonus = this._gui.level * 1000;
 			// this._successLevelScreen.livesBonus = this._gui.lives * 10000;
 			// this._successLevelScreen.extraBonus = (this._gui.explosed - game.common.GameData.GOAL_BALLS[this._gui.level - 1]) * 10000;
@@ -273,6 +282,11 @@ module game {
 			// 	this._successLevelScreen.addEventListener(game.display.LevelSuccessPanel.PLAY_NEXT_ROUND, flash.bind(this.gameOver, this), null);
 			// }
 			// _self__.addChild(this._successLevelScreen);
+		}
+
+		private onNextLevel() {
+			App.closePanel(App.gameResult);
+			this.startGame();
 		}
 
 		private onPlayAgain(e: egret.Event) {

@@ -37,3 +37,5 @@ var LevelItem = (function (_super) {
     return LevelItem;
 }(eui.Component));
 __reflect(LevelItem.prototype, "LevelItem", ["eui.UIComponent", "egret.DisplayObject"]);
+window["LevelItem"] = LevelItem;
+//# sourceMappingURL=LevelItem.js.map

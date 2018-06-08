@@ -46,3 +46,4 @@ var game;
     game.Cursor = Cursor;
     __reflect(Cursor.prototype, "game.Cursor");
 })(game || (game = {}));
+//# sourceMappingURL=Cursor.js.map
